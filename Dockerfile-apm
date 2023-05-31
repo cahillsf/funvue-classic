@@ -1,0 +1,18 @@
+FROM node:lts-alpine as build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+COPY vuikit.css ./node_modules/@vuikit/theme/dist/
+RUN npm run build
+
+# production stage
+FROM opentracing/nginx-opentracing:latest as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY ./docker_init ./
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d
+COPY ./apm/nginx.conf /etc/nginx
+RUN chmod +x ./docker_entrypoint_apm.sh ./generate_env_config.sh ./generate_dd_config.sh
+EXPOSE 80
+CMD ["/bin/sh", "docker_entrypoint_apm.sh"]

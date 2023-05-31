@@ -1,0 +1,7 @@
+FROM node:lts-alpine as build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+COPY vuikit.css ./node_modules/@vuikit/theme/dist/
+CMD ["npm","run","dev"]
