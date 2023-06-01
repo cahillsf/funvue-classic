@@ -1,0 +1,1 @@
+aws lightsail create-instances --instance-names ps1 --availability-zone us-east-1a --user-data file:///Users/stephen.cahill/funvue-classic/startup.sh --blueprint-id ubuntu_20_04 --bundle-id nano_2_0
