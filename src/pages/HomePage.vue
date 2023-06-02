@@ -89,29 +89,6 @@ export default {
           // console.log(curCard);
         })
       },
-      getCards() {
-        // console.log("ddAppId is "+ process.env.VUE_APP_ddAppId);
-
-        // this is the path for local dev and in docker compose
-        // const path = 'http://localhost:8000/cards';
-        
-        // this is the path for k8s deploy-- see /src/nginx.conf 
-        // requests to flask when served via nginx all go through /api base path
-        // const path = '/api/cards';
-        const path = this.$hostname + '/cards';
-        console.log("path is " + path)
-        axios.get(path)
-          .then((res) => { 
-            console.log(res.data)
-            this.mainCards = JSON.parse(JSON.stringify(res.data));
-            this.generateCards();
-          })
-          .catch((error) => {
-            // eslint-disable-next-line
-            console.error(error);
-          });
-      },
-      // TODO: dynamically assign grid row to footer
       showBottomBar() {
         this.bottomBarProps['display'] = 'grid';
       },
