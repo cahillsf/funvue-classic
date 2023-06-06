@@ -1,1 +1,4 @@
 logs_enabled: true
+process_config:
+  process_collection:
+    enabled: "true"
