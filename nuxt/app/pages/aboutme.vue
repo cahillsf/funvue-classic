@@ -72,21 +72,20 @@ const bottomBarProps = ref({
 #portrait {
   position: relative;
   width: 220px;
-  height: 220px; /* Fixed height to match width */
-  object-fit: cover; /* Ensures image isn't squished */
+  height: auto;
   top: 0;
   float: left;
-  border-radius: 50%; /* Perfect circle */
+  border-radius: 16px;
   margin-left: 0;
-  margin-right: 35px;
+  margin-right: 25px;
   margin-bottom: 15px;
-  box-shadow: 0 12px 24px rgba(27, 67, 50, 0.2);
+  box-shadow: 0 8px 16px rgba(27, 67, 50, 0.3);
   border: 4px solid white;
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: transform 0.3s ease;
 }
 
 #portrait:hover {
-  transform: scale(1.05) rotate(2deg);
+  transform: scale(1.05);
 }
 </style>
 
