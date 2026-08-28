@@ -16,7 +16,7 @@
           :style="card.style" 
           :data-aos="card.animation" 
           class="card"
-          @click="navigateTo(card.route)"
+          @click="handleNavigate(card.route)"
         >
           <h3>{{ card.title }}</h3>
           <img v-if="card.imgPath" class="card-img" :src="`/assets/project_icons/${card.imgPath}`"> 
@@ -40,6 +40,14 @@ const bottomBarProps = ref({
 })
 const cards = ref([])
 const mainCards = ref([])
+
+const handleNavigate = (route) => {
+  if (route.startsWith('http')) {
+    window.open(route, '_blank')
+  } else {
+    navigateTo(route)
+  }
+}
 
 const generateCards = () => {
   mainCards.value = JSON.parse(JSON.stringify(cardsData))

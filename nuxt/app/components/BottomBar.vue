@@ -3,15 +3,6 @@
     <footer>
       <h5>Copyright &#169; Stephen Cahill 2025</h5>
     </footer>
-    <table id="icons">
-      <tbody>
-        <tr>
-          <td><a href="https://github.com/cahillsf" target="_blank"><img src="/assets/ghIcon.png"/></a></td>
-          <td><a href="https://www.linkedin.com/in/cahillsf/" target="_blank"><img src="/assets/lin.png"/></a></td>
-          <td><a href="mailto:cahillsf9@gmail.com" target="_blank"><img src="/assets/email.png"/></a></td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 
@@ -44,16 +35,22 @@ footer {
   width: auto;
   margin-left: auto;
   align-self: center;
-  padding-right: 10px;
+  padding-right: 20px;
+  border-spacing: 15px; /* Adds space between icons */
 }
 
 table img {
   position: relative;
-  height: 30px;
+  height: 35px; /* Slightly larger */
+  filter: brightness(0) invert(1); /* Makes them white to pop against the green */
+  opacity: 0.85;
+  transition: all 0.3s ease;
 }
 
-table td:nth-child(2) img {
-  filter: grayscale(100%) brightness(0);
+table img:hover {
+  transform: scale(1.2) translateY(-3px);
+  opacity: 1;
+  filter: brightness(0) invert(1) drop-shadow(0 4px 8px rgba(255,255,255,0.4));
 }
 </style>
 

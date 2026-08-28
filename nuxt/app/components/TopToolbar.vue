@@ -19,6 +19,16 @@
       >
         {{ page.title }}
       </button>
+      <div class="social-divider"></div>
+      <a href="https://github.com/cahillsf" target="_blank" class="menu-button social-btn">
+        <img src="/assets/ghIcon.png"/>
+      </a>
+      <a href="https://www.linkedin.com/in/cahillsf/" target="_blank" class="menu-button social-btn">
+        <img src="/assets/lin.png"/>
+      </a>
+      <a href="mailto:cahillsf9@gmail.com" target="_blank" class="menu-button social-btn">
+        <img src="/assets/email.png"/>
+      </a>
     </div>
   
     <div id="icon-div" class="icon-animate-in" :class="{ 'icon-div-invisible': largeScreenOnLoad, 'icon-animate-out': iconAnimate}">
@@ -161,8 +171,9 @@ onUnmounted(() => {
 }
 
 #button-wrapper {
-  display: grid;
-  grid-column-gap: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   position: relative;
   margin-right: 2%;
 }
@@ -177,28 +188,49 @@ onUnmounted(() => {
 /* Show buttons on large screens by default */
 @media only screen and (min-width: 670px) {
   #button-wrapper {
-    display: grid;
+    display: flex;
   }
 }
 
+.social-divider {
+  width: 1px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.4);
+  margin: 0 4px;
+}
+
+.menu-button.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.menu-button.social-btn img {
+  height: 18px;
+  filter: brightness(0) invert(1);
+}
+
 .menu-button {
-  grid-row: 1;
-  width: 100%;
   padding: 8px 16px;
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
+  border-radius: 24px; /* Fully pill-shaped */
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   backdrop-filter: blur(10px);
 }
 
 .menu-button:hover {
   background-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .selected {

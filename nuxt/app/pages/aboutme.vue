@@ -41,9 +41,10 @@ const bottomBarProps = ref({
   padding: 40px 5%;
   max-width: 1000px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.85); /* Slightly more opaque glass */
+  border-radius: 24px; /* Much softer corners */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05); /* Soft floating shadow */
+  backdrop-filter: blur(8px);
 }
 
 #mainDiv h1 {
@@ -71,20 +72,21 @@ const bottomBarProps = ref({
 #portrait {
   position: relative;
   width: 220px;
-  height: auto;
+  height: 220px; /* Fixed height to match width */
+  object-fit: cover; /* Ensures image isn't squished */
   top: 0;
   float: left;
-  border-radius: 16px;
+  border-radius: 50%; /* Perfect circle */
   margin-left: 0;
-  margin-right: 25px;
+  margin-right: 35px;
   margin-bottom: 15px;
-  box-shadow: 0 8px 16px rgba(27, 67, 50, 0.3);
+  box-shadow: 0 12px 24px rgba(27, 67, 50, 0.2);
   border: 4px solid white;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 #portrait:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) rotate(2deg);
 }
 </style>
 
