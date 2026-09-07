@@ -1,0 +1,70 @@
+name: Deploy Portfolio
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+
+# Required for requesting the OIDC token
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Adjust as needed for funvue-classic
+          cache: 'npm'
+          cache-dependency-path: './nuxt/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: ./nuxt
+        run: npm ci
+
+      - name: Generate Static Site
+        working-directory: ./nuxt
+        run: npm run generate
+
+      - name: Configure AWS credentials (Demo)
+        if: github.ref == 'refs/heads/staging'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.DEMO_AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Deploy to Demo S3
+        if: github.ref == 'refs/heads/staging'
+        working-directory: ./nuxt
+        run: |
+          aws s3 sync .output/public s3://${{ secrets.DEMO_S3_BUCKET }} --delete
+
+      - name: Invalidate CloudFront Demo
+        if: github.ref == 'refs/heads/staging'
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.DEMO_CLOUDFRONT_ID }} --paths "/*"
+
+      - name: Configure AWS credentials (Prod)
+        if: github.ref == 'refs/heads/main'
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.PROD_AWS_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Deploy to Prod S3
+        if: github.ref == 'refs/heads/main'
+        working-directory: ./nuxt
+        run: |
+          aws s3 sync .output/public s3://${{ secrets.PROD_S3_BUCKET }} --delete
+
+      - name: Invalidate CloudFront Prod
+        if: github.ref == 'refs/heads/main'
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.PROD_CLOUDFRONT_ID }} --paths "/*"
