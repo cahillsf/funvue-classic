@@ -3,12 +3,7 @@
     <TopToolbar />
     <div id="pdfMain">
       <div id="pdfWrapper">
-        <iframe 
-          src="/cahillsf_cv_f.pdf" 
-          width="100%" 
-          height="800px"
-          style="border: none;"
-        ></iframe>
+        <iframe src="/cahillsf_cv_f.pdf"></iframe>
       </div>
     </div>
     <BottomBar :style="bottomBarProps" />
@@ -29,15 +24,27 @@ const bottomBarProps = ref({
 <style scoped>
 #pdfMain {
   grid-row: 2;
-  background-color: #ccc;
+  background-color: transparent; /* Lets the global #app pattern show through */
   width: 100%;
-  display: grid;
+  display: flex;
+  justify-content: center;
+  padding: 4vh 0; /* Breathing room top and bottom */
 }
 
 #pdfWrapper {
-  width: 80vw;
-  padding-top: 10px;
-  justify-self: center;
+  width: 85vw;
+  max-width: 1000px; /* Prevents it from getting too wide on huge monitors */
+  height: 80vh; /* Responsive height */
+  border-radius: 16px;
+  overflow: hidden; /* Clips the iframe to the rounded corners */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.05); /* Soft, realistic floating shadow */
+  background: white;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .singleColGridCv {

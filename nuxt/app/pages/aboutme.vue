@@ -41,9 +41,10 @@ const bottomBarProps = ref({
   padding: 40px 5%;
   max-width: 1000px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.7);
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.85); /* Slightly more opaque glass */
+  border-radius: 24px; /* Much softer corners */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05); /* Soft floating shadow */
+  backdrop-filter: blur(8px);
 }
 
 #mainDiv h1 {
