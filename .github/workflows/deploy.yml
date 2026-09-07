@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '18' # Adjust as needed for funvue-classic
+          node-version: '22' # Required for Nuxt 4 and Vite 7
           cache: 'npm'
           cache-dependency-path: './nuxt/package-lock.json'
 
