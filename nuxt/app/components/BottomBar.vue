@@ -1,7 +1,7 @@
 <template>
   <div id="footer-div">
     <footer>
-      <h5>Copyright &#169; Stephen Cahill 2026</h5>
+      <h5>Copyright &#169; Stephen Cahill 2027</h5>
     </footer>
   </div>
 </template>
