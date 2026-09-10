@@ -31,6 +31,10 @@ jobs:
 
       - name: Generate Static Site
         working-directory: ./nuxt
+        env:
+          DD_APP_ID: ${{ secrets.DD_APP_ID }}
+          DD_CLIENT_TOKEN: ${{ secrets.DD_CLIENT_TOKEN }}
+          NODE_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
         run: npm run generate
 
       - name: Configure AWS credentials (Demo)
