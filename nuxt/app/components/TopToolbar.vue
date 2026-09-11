@@ -49,10 +49,24 @@
           <a 
             v-for="page in pages" 
             :key="page._id" 
-            @click="page.selected ? null : navigateTo(page.path)"
+            class="dropdown-link"
+            :class="{ 'selected': page.selected }"
+            @click="handleNavClick(page.path, page.selected)"
           >
             {{ page.title }}
           </a>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-social-row">
+            <a href="https://github.com/cahillsf" target="_blank" class="menu-button social-btn" aria-label="GitHub" @click="showDropdown">
+              <img src="/assets/ghIcon.png" alt="GitHub"/>
+            </a>
+            <a href="https://www.linkedin.com/in/cahillsf/" target="_blank" class="menu-button social-btn" aria-label="LinkedIn" @click="showDropdown">
+              <img src="/assets/lin.png" alt="LinkedIn"/>
+            </a>
+            <a href="mailto:cahillsf9@gmail.com" target="_blank" class="menu-button social-btn" aria-label="Email" @click="showDropdown">
+              <img src="/assets/email.png" alt="Email"/>
+            </a>
+          </div>
         </nav>
       </div>
     </div>
@@ -93,6 +107,13 @@ const setCurPageClass = () => {
 const showDropdown = () => {
   activeBurger.value = !dropDisplayed.value
   dropDisplayed.value = !dropDisplayed.value
+}
+
+const handleNavClick = (path, selected) => {
+  showDropdown()
+  if (!selected) {
+    navigateTo(path)
+  }
 }
 
 const triggerTrackResize = debounce(() => {
@@ -305,25 +326,59 @@ onUnmounted(() => {
   top: 55px;
   border-radius: 8px;
   padding: 10px;
+  min-width: 150px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 #nav-dropdown nav {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
-#nav-dropdown a {
+#nav-dropdown .dropdown-link {
   color: white;
   text-decoration: none;
   padding: 8px 16px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
 }
 
-#nav-dropdown a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+#nav-dropdown .dropdown-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+#nav-dropdown .dropdown-link.selected {
+  background-color: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+}
+
+.dropdown-divider {
+  width: 100%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.25);
+  margin: 4px 0;
+}
+
+.dropdown-social-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 4px 0 2px 0;
+}
+
+#nav-dropdown .social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  text-decoration: none;
 }
 
 @media only screen and (min-width: 670px) {
