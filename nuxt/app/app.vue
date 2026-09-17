@@ -14,6 +14,18 @@
   font-style: normal;
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 #app {
   font-family: "Playfair", Times, serif;
   -webkit-font-smoothing: antialiased;
