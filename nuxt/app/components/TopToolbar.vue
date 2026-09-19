@@ -1,7 +1,7 @@
 <template>
   <div class="toolbarSticky" role="banner">
     <div id="logo-name" @click="onHomePage ? $router.go() : navigateTo('/')">
-      <img id="logo" src="/assets/initials.png"/>
+      <img id="logo" src="/assets/initials.png" width="50" height="50" alt="Stephen Cahill Initials"/>
       <ul>
         <li>Stephen Cahill</li>
         <li>Developer</li>
@@ -9,7 +9,7 @@
     </div>
     <div class="spacer"></div>
 
-    <div id="button-wrapper" class="menu-button-in" :class="{ 'menu-button-invisible': smallScreenOnLoad, 'menu-button-out': buttonAnimate }">
+    <div id="button-wrapper">
       <button 
         v-for="page in pages" 
         :key="page._id" 
@@ -20,18 +20,33 @@
         {{ page.title }}
       </button>
       <div class="social-divider"></div>
-      <a href="https://github.com/cahillsf" target="_blank" class="menu-button social-btn">
-        <img src="/assets/ghIcon.png"/>
+      <a href="https://github.com/cahillsf" target="_blank" class="menu-button social-btn" aria-label="GitHub">
+        <img src="/assets/ghIcon.png" width="20" height="20" alt="GitHub"/>
       </a>
-      <a href="https://www.linkedin.com/in/cahillsf/" target="_blank" class="menu-button social-btn">
-        <img src="/assets/lin.png"/>
+      <a href="https://www.linkedin.com/in/cahillsf/" target="_blank" class="menu-button social-btn" aria-label="LinkedIn">
+        <img src="/assets/lin.png" width="20" height="20" alt="LinkedIn"/>
       </a>
-      <a href="mailto:cahillsf9@gmail.com" target="_blank" class="menu-button social-btn">
-        <img src="/assets/email.png"/>
-      </a>
+      <div class="email-btn-container">
+        <button 
+          class="menu-button social-btn" 
+          :class="{ 'copied-success': copied }" 
+          aria-label="Copy email address" 
+          title="Copy email to clipboard" 
+          type="button"
+          @click="copyEmail"
+        >
+          <svg v-if="copied" class="check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <img v-else src="/assets/email.png" alt="Email"/>
+        </button>
+        <transition name="fade">
+          <div v-if="copied" class="copied-tooltip">Copied to clipboard!</div>
+        </transition>
+      </div>
     </div>
   
-    <div id="icon-div" class="icon-animate-in" :class="{ 'icon-div-invisible': largeScreenOnLoad, 'icon-animate-out': iconAnimate}">
+    <div id="icon-div">
       <button 
         id="hamburger" 
         class="hamburger--vortex"  
@@ -39,6 +54,7 @@
         @click="showDropdown" 
         ref="sandwichIcon" 
         type="button"
+        aria-label="Toggle navigation menu"
       >
         <span class="hamburger-box">
           <span class="hamburger-inner"></span>
@@ -63,9 +79,24 @@
             <a href="https://www.linkedin.com/in/cahillsf/" target="_blank" class="menu-button social-btn" aria-label="LinkedIn" @click="showDropdown">
               <img src="/assets/lin.png" alt="LinkedIn"/>
             </a>
-            <a href="mailto:cahillsf9@gmail.com" target="_blank" class="menu-button social-btn" aria-label="Email" @click="showDropdown">
-              <img src="/assets/email.png" alt="Email"/>
-            </a>
+            <div class="email-btn-container">
+              <button 
+                class="menu-button social-btn" 
+                :class="{ 'copied-success': copied }" 
+                aria-label="Copy email address" 
+                title="Copy email to clipboard" 
+                type="button"
+                @click="copyEmail"
+              >
+                <svg v-if="copied" class="check-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <img v-else src="/assets/email.png" alt="Email"/>
+              </button>
+              <transition name="fade">
+                <div v-if="copied" class="copied-tooltip dropdown-tooltip">Copied to clipboard!</div>
+              </transition>
+            </div>
           </div>
         </nav>
       </div>
@@ -82,13 +113,36 @@ const router = useRouter()
 const route = useRoute()
 
 const dropDisplayed = ref(false)
-const largeScreenOnLoad = ref(false)
-const smallScreenOnLoad = ref(false)
-const firstTime = ref(true)
-const iconAnimate = ref(null)
-const buttonAnimate = ref(null)
 const activeBurger = ref(false)
-const sandwichIcon = ref(null)
+const copied = ref(false)
+let copyTimeout = null
+
+const copyEmail = async () => {
+  const email = 'cahillsf9@gmail.com'
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(email)
+    } else {
+      const textArea = document.createElement('textarea')
+      textArea.value = email
+      textArea.style.position = 'fixed'
+      textArea.style.left = '-999999px'
+      textArea.style.top = '-999999px'
+      document.body.appendChild(textArea)
+      textArea.focus()
+      textArea.select()
+      document.execCommand('copy')
+      textArea.remove()
+    }
+    copied.value = true
+    if (copyTimeout) clearTimeout(copyTimeout)
+    copyTimeout = setTimeout(() => {
+      copied.value = false
+    }, 2200)
+  } catch (err) {
+    console.error('Failed to copy email: ', err)
+  }
+}
 
 const pages = ref([
   { '_id': 0, 'title': 'Home', 'path': '/', 'selected': false },
@@ -117,37 +171,20 @@ const handleNavClick = (path, selected) => {
 }
 
 const triggerTrackResize = debounce(() => {
-  if (window.innerWidth >= 670) {
-    if (dropDisplayed.value && sandwichIcon.value) {
-      sandwichIcon.value.click()
-    }
-    if (smallScreenOnLoad.value && firstTime.value) {
-      smallScreenOnLoad.value = false
-      firstTime.value = false
-      buttonAnimate.value = true
-      iconAnimate.value = true
-    }
-  } else if (largeScreenOnLoad.value && firstTime.value) {
-    largeScreenOnLoad.value = false
-    firstTime.value = false
-    iconAnimate.value = true
-    buttonAnimate.value = true
+  if (window.innerWidth >= 670 && dropDisplayed.value) {
+    dropDisplayed.value = false
+    activeBurger.value = false
   }
 }, 200)
 
 onMounted(() => {
-  if (window.innerWidth > 670) {
-    largeScreenOnLoad.value = true
-  } else {
-    smallScreenOnLoad.value = true
-  }
-  
   window.addEventListener("resize", triggerTrackResize)
   setCurPageClass()
 })
 
 onUnmounted(() => {
   window.removeEventListener("resize", triggerTrackResize)
+  if (copyTimeout) clearTimeout(copyTimeout)
 })
 </script>
 
@@ -236,6 +273,71 @@ onUnmounted(() => {
   filter: brightness(0) invert(1);
 }
 
+.email-btn-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-button.copied-success {
+  background-color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.check-icon {
+  stroke: #1b4332;
+}
+
+.copied-tooltip {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background-color: #1b4332;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+  z-index: 100;
+}
+
+.copied-tooltip::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  right: 12px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #1b4332 transparent;
+}
+
+.dropdown-tooltip {
+  top: calc(100% + 8px);
+  right: 0;
+}
+
+.dropdown-tooltip::before {
+  right: 12px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
 .menu-button {
   padding: 8px 16px;
   background-color: rgba(255, 255, 255, 0.2);
@@ -267,13 +369,16 @@ onUnmounted(() => {
 
 .toolbarSticky {
   position: fixed;
-  z-index: 1;
+  z-index: 1000;
+  top: 0;
   left: 0;
   right: 0;
   height: 60px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-sizing: border-box;
   background: linear-gradient(135deg, #52b788 0%, #1b4332 100%);
   color: white;
   font-weight: 600;
@@ -281,49 +386,32 @@ onUnmounted(() => {
 }
 
 #icon-div {
-  display: grid;
-  position: absolute;
-  right: -10vw;
+  position: relative;
+  display: flex;
+  align-items: center;
   background-color: transparent;
   margin: 0;
 }
 
-/* Hide burger on large screens by default */
-@media only screen and (min-width: 670px) {
+/* Hide burger on large screens */
+@media only screen and (min-width: 671px) {
   #icon-div {
     display: none;
   }
 }
 
-/* Show burger on small screens by default */
+/* Show burger on small screens */
 @media only screen and (max-width: 670px) {
   #icon-div {
-    display: grid;
+    display: flex;
   }
-}
-
-.icon-div-invisible {
-  display: grid;
-  right: -10vw;
-  position: relative;
-  left: -700vw;
-  opacity: 0;
-  width: 0;
-}
-
-.menu-button-invisible {
-  left: -700vw;
-  position: relative;
-  opacity: 0;
-  width: 0;
-  height: 100%;
 }
 
 #nav-dropdown {
   position: absolute;
   background: linear-gradient(135deg, #52b788 0%, #1b4332 100%);
-  right: 0px;
-  top: 55px;
+  right: 0;
+  top: 50px;
   border-radius: 8px;
   padding: 10px;
   min-width: 150px;
@@ -381,101 +469,6 @@ onUnmounted(() => {
   text-decoration: none;
 }
 
-@media only screen and (min-width: 670px) {
-  .icon-animate-out {
-    animation-duration: 1s; 
-    animation-name: icon-animate-out;
-    animation-fill-mode: forwards;
-  }
-  .menu-button-in {
-    animation-duration: 0.7s;
-    animation-name: buttons-animate-in;
-    animation-fill-mode: forwards;
-  }
-}
-
-@media only screen and (max-width: 670px) {
-  .menu-button-out {
-    animation-duration: 0.7s;
-    animation-name: buttons-animate-out;
-    animation-fill-mode: forwards;
-  }
-
-  .icon-animate-in {
-    animation-duration: 1s;
-    animation-name: icon-animate-in;
-    animation-fill-mode: forwards;
-  }
-}
-
-@keyframes icon-animate-out {
-  0% {
-    right: 0;
-    position: relative
-  }
-  100% {
-    position: relative;
-    left: -700vw;
-    opacity: 0;
-    width: 0;
-  }
-}
-
-@keyframes icon-animate-in {
-  from {
-    right: -10vw;
-    position: relative;
-  }
-  to {
-    right: 0;
-    position: relative;
-  }
-}
-
-@keyframes buttons-animate-in {
-  100% {
-    margin-right: 2%;
-    position: relative;
-  }
-  80% {
-    left: -10vw;
-    position: relative;
-    opacity: 0.9;
-  }
-  40% {
-    left: -80vw;
-    position: relative;
-    opacity: 0.4;
-  }
-  0% {
-    left: -100vw;
-    position: relative;
-    opacity: 0;
-  }
-}
-
-@keyframes buttons-animate-out {
-  0% {
-    margin-right: 2%;
-    position: relative;
-  }
-  10% { 
-    left: -50vw;
-    position: relative;
-    opacity: 0.9;
-  }
-  90% {
-    left: -500vw;
-    position: relative;
-    opacity: 0.5;
-  }
-  100% {
-    left: -700vw;
-    position: relative;
-    opacity: 0;
-    width: 0;
-  }
-}
 
 .hamburger {
   padding: 15px 15px;
