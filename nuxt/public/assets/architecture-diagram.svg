@@ -128,7 +128,6 @@
           <text x="32" y="11" class="t-title" font-size="12.5">Certificate Manager</text>
           <text x="32" y="24" class="t-sub" font-size="10.5">SSL / TLS Termination</text>
         </g>
-        <text x="12" y="54" class="t-sub" font-size="10">Shared Multi-Domain Cert</text>
       </g>
 
       <!-- Row 2: CloudFront Main Card -->
