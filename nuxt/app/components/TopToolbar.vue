@@ -1,7 +1,7 @@
 <template>
   <div class="toolbarSticky" role="banner">
     <div id="logo-name" @click="onHomePage ? $router.go() : navigateTo('/')">
-      <img id="logo" src="/assets/initials.png"/>
+      <img id="logo" src="/assets/initials.png" width="50" height="50" alt="Stephen Cahill Initials"/>
       <ul>
         <li>Stephen Cahill</li>
         <li>Developer</li>
@@ -21,10 +21,10 @@
       </button>
       <div class="social-divider"></div>
       <a href="https://github.com/cahillsf" target="_blank" class="menu-button social-btn" aria-label="GitHub">
-        <img src="/assets/ghIcon.png" alt="GitHub"/>
+        <img src="/assets/ghIcon.png" width="20" height="20" alt="GitHub"/>
       </a>
       <a href="https://www.linkedin.com/in/cahillsf/" target="_blank" class="menu-button social-btn" aria-label="LinkedIn">
-        <img src="/assets/lin.png" alt="LinkedIn"/>
+        <img src="/assets/lin.png" width="20" height="20" alt="LinkedIn"/>
       </a>
       <div class="email-btn-container">
         <button 

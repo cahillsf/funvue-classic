@@ -88,4 +88,19 @@ a:hover {
 a:visited {
   color: #1b4332;
 }
+
+#logo {
+  width: 50px !important;
+  height: 50px !important;
+  max-width: 50px !important;
+  max-height: 50px !important;
+}
+
+.card-img {
+  max-height: 125px;
+  max-width: 125px;
+  width: auto;
+  height: 125px;
+  object-fit: contain;
+}
 </style>
