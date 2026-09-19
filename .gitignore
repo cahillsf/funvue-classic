@@ -12,3 +12,7 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.icloud
+
+# Antigravity & worktrees
+.antigravity/
+.worktrees/
