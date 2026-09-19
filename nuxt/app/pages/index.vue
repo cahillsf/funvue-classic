@@ -19,7 +19,14 @@
           @click="handleNavigate(card.route)"
         >
           <h3>{{ card.title }}</h3>
-          <img v-if="card.imgPath" class="card-img" :src="`/assets/project_icons/${card.imgPath}`"> 
+          <img 
+            v-if="card.imgPath" 
+            class="card-img" 
+            :src="`/assets/project_icons/${card.imgPath}`" 
+            width="125" 
+            height="125" 
+            :alt="card.title"
+          > 
         </div>
       </div>
       <BottomBar :style="bottomBarProps" />
@@ -123,6 +130,10 @@ onUpdated(() => {
 
 .card-img {
   height: 125px;
+  width: auto;
+  max-width: 125px;
+  max-height: 125px;
+  object-fit: contain;
   transition: transform 0.3s;
 }
 

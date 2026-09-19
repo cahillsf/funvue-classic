@@ -7,6 +7,33 @@
 /* Substantial part of the code is adapted from UIkit,
   Copyright (c) 2013-2018 YOOtheme GmbH, getuikit.com */
 
+/* Critical element constraints preventing layout shifts */
+#logo {
+  width: 50px !important;
+  height: 50px !important;
+  max-width: 50px !important;
+  max-height: 50px !important;
+}
+.card-img {
+  max-height: 125px !important;
+  max-width: 125px !important;
+  width: auto !important;
+  height: 125px !important;
+  object-fit: contain !important;
+}
+.vector-diagram-img {
+  width: 100% !important;
+  height: auto !important;
+  max-width: 1190px !important;
+  display: block !important;
+}
+.gh-icon {
+  width: 36px !important;
+  height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+}
+
 /* ========================================================================
    Component: Base
  ========================================================================== */
